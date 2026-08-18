@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Draggable from 'react-draggable';
 import images from './images';
 
@@ -28,10 +28,10 @@ function App() {
   }
 
   // update and emit new position
-  const updateNewPosition = ({ x, y }) => {
+  const updateNewPosition = useCallback(({ x, y }) => {
     bc.postMessage({ type: 'update_position', value: { x, y, windowX: window.screenX, windowY: window.screenY } })
     setPosition({ x, y })
-  }
+  }, [bc])
 
   useEffect(() => {
     bc.onmessage = (event) => {
@@ -72,7 +72,7 @@ function App() {
     };
 
     return () => bc.onmessage = null
-  }, [bc, windowId, index, imageId, position])
+  }, [bc, windowId, index, imageId, position, updateNewPosition])
 
   // detect window moved
   useEffect(() => {
@@ -101,7 +101,7 @@ function App() {
   // boarding case new_tab event
   useEffect(() => {
     bc.postMessage({ type: 'new_tab', value: windowId });
-  }, [windowId])
+  }, [bc, windowId])
 
   // loading images effect
   useEffect(() => {
@@ -134,6 +134,7 @@ function App() {
                 <h1 className="text-4xl font-extrabold leading-none tracking-tight text-gray-900  dark:text-white uppercase mb-2">Gương chiếu sếch</h1>
                 <a
                   target='_blank'
+                  rel='noreferrer'
                   href="https://github.com/zennomi/Seg-Mirror-V1"
                   className="inline-flex gap-x-1 mb-2 items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
                   <svg
@@ -187,7 +188,7 @@ function App() {
               updateNewPosition({ x: data.x, y: data.y });
             }}
           >
-            <img className='cursor-move max-w-[900px]' src={index === 2 ? image2Url : image1Url} draggable="false" />
+            <img className='cursor-move max-w-[900px]' src={index === 2 ? image2Url : image1Url} alt="" draggable="false" />
           </Draggable>
         }
       </div>
