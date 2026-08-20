@@ -5,7 +5,7 @@ const images = [
         uncensor: "https://sbucket.harumi.io.vn/mchodoicailozj.webp",
     },
     {
-        title: "kyanbels",
+        title: "hen",
         censor: "https://sbucket.harumi.io.vn/imagsdfe.png",
         uncensor: "https://sbucket.harumi.io.vn/dee-dee-chuppy.png",
     },
